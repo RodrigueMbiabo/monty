@@ -14,6 +14,15 @@ print o
 +++.
 
 print l
+<++++[>+++<-]>+.
+
+print 
+++.
+
+print 
+-----.
+
+print 
 -.
 
 print newline
