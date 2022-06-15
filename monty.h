@@ -53,6 +53,7 @@ void execute(char *string[], stack_t *stack);
 int nlfind(char *list);
 void free_list(char *a[]);
 int combfind(char *list, int ln);
+size_t getline (char **string, size_t *n, FILE *stream);
 
 
 #endif
