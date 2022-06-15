@@ -1,102 +1,41 @@
 #include "monty.h"
 
-/**
- * pall - Print all values on the stack
- * @stack: pointer to head of stack
- * @line_num: file's line number
- * Return: Void
- */
-
-void pall(stack_t **stack, unsigned int line_num)
-{
-	stack_t *h = *stack;
-	(void)line_num;
-
-	while (h)
-	{
-		printf("%d\n", h->n);
-		h = h->next;
-	}
-}
+vars_t *element;
 
 /**
- * push - Pushes an element to the stack
- * @stack: pointer to head of stack
- * @line_num: file's line number
- * @n: variable
- * Return: address of new element
- */
-
-void push(stack_t **stack, unsigned int line_num, int n)
+  * main - Entry Point
+  * @argc: Number of arguments
+  * @argv: Arguments names
+  * Return: 0 on success, exit on failures
+  */
+int main(int argc, char **argv)
 {
-	stack_t *new, *h = *stack;
+	size_t n = 0;
+	vars_t temp = {0, NULL, NULL, NULL, NULL, NULL, 1};
 
-	if (stack == NULL)
+	element = &temp;
+	element->fname = argv[1];
+	if (argc != 2)
+		exit_function(16);
+
+	element->fp = fopen(argv[1], "r");
+	if (element->fp == NULL)
+		exit_function(1);
+
+	for (; getline(&(element->buf), &n, element->fp) != EOF;
+		element->line_number++)
 	{
-		fprintf(stderr, "L%d: usage: push integer", line_num);
-		exit(EXIT_FAILURE);
+		element->tokened = malloc(sizeof(char *) * 2);
+		if (element->tokened == NULL)
+			exit_function(3);
+		get_tokens(element->buf);
+		opcode_search();
+		free_buffer();
+		free_token();
 	}
-	new = malloc(sizeof(stack_t));
-	if (new == NULL)
-		exit(EXIT_FAILURE);
-	new->prev = NULL;
-	new->n = n;
-	new->next = *stack;
-	if (*stack)
-		h->prev = new;
-	*stack = new;
-}
-
-/**
- * pop - Removes the top element of the stack
- * @stack: pointer to head of stack
- * @line_num: file's line number
- * Return: Void
- */
-
-void pop(stack_t **stack, unsigned int line_num)
-{
-	stack_t *h = *stack;
-
-	if (!(*stack))
-	{
-		fprintf(stderr, "L%u: can't pop an empty stack\n", line_num);
-		exit(EXIT_FAILURE);
-	}
-
-
-	if (h)
-	{
-		*stack = (h)->next;
-		free(h);
-	}
-}
-
-/**
- * swap - Swaps the top two elements of the stack
- * @stack: pointer to head of stack
- * @line_num: file's line number
- * Return: Void
- */
-void swap(stack_t **stack, unsigned int line_num)
-{
-	stack_t *h = *stack, *ptr;
-
-	if ((*stack) == NULL || (*stack)->next == NULL)
-	{
-		fprintf(stderr, "L%u: can't swap, stack too short\n", line_num);
-		exit(EXIT_FAILURE);
-	}
-
-	if (h && h->next)
-	{
-		ptr = h->next;
-		if (ptr->next)
-			ptr->next->prev = h;
-		h->next = ptr->next;
-		ptr->prev = NULL;
-		ptr->next = h;
-		h->prev = ptr;
-		*stack = ptr;
-	}
+	free_buffer();
+	free_list(element->head);
+	free_token();
+	fclose(element->fp);
+	return (0);
 }
