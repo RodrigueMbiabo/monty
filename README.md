@@ -5,7 +5,7 @@ Monty 0.98 is a scripting language that is first compiled into Monty byte codes 
 ### **Example**
 
 Example Code
-#include "holberton.h"
+#include "main.h"
 
           int main (void)
 
@@ -25,7 +25,7 @@ Example1
 
 ## **Compilation**
 Files are compiled this way:
-***$ gcc -Wall -Werror -Wextra -pedantic *.c -o monty***
+***$ gcc -Wall -Werror -Wextra -pedantic -std=c89 *.c -o monty***
 
 # **Authors**
-[Maria Crespo](https://twitter.com/mafe_crespo)
+[Mbiaha Rodrigue](https://github.com/RodrigueMbiabo)
